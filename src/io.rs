@@ -176,7 +176,9 @@ pub trait Read: ReadBytesExt {
         let mut output = Vec::new();
         loop {
             let payload_len = try!(self.read_uint::<LE>(3)) as usize;
+            println!("payload_len: {}", payload_len);
             let srv_seq_id = try!(self.read_u8());
+            println!("srv_seq_id: {}", srv_seq_id);
             if srv_seq_id != seq_id {
                 return Err(MyDriverError(PacketOutOfSync));
             }
@@ -194,6 +196,7 @@ pub trait Read: ReadBytesExt {
                 output.reserve(payload_len);
                 let mut chunk = self.take(payload_len as u64);
                 let count = try!(chunk.read_to_end(&mut output));
+                println!("count: {} -- output: {:?}", count, output);
                 if count != payload_len {
                     return Err(io::Error::new(Other, "Unexpected EOF while reading packet").into())
                 }

@@ -1474,6 +1474,7 @@ impl MyConn {
                     let mut params: Vec<Column> = Vec::with_capacity(stmt.num_params as usize);
                     for _ in 0..stmt.num_params {
                         let pld = try!(self.read_packet());
+                        println!("param packet: {:?}", pld);
                         params.push(try!(Column::from_payload(self.last_command, pld.as_ref())));
                     }
                     stmt.params = Some(params);
@@ -1483,6 +1484,7 @@ impl MyConn {
                     let mut columns: Vec<Column> = Vec::with_capacity(stmt.num_columns as usize);
                     for _ in 0..stmt.num_columns {
                         let pld = try!(self.read_packet());
+                        println!("column packet: {:?}", pld);
                         columns.push(try!(Column::from_payload(self.last_command, pld.as_ref())));
                     }
                     stmt.columns = Some(columns);
